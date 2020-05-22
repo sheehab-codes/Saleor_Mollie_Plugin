@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
 import { checkoutFragment } from "../fragments/checkout";
-import { paymentFragment } from "../fragments/payment";
+import { paymentFragment, paymentOrderFragment } from "../fragments/payment";
 import { orderDetailFragment } from "../fragments/user";
 
 export const updateCheckoutLineMutation = gql`
@@ -189,8 +189,9 @@ export const createCheckoutPaymentMutation = gql`
   mutation CreateCheckoutPayment(
     $checkoutId: ID!
     $paymentInput: PaymentInput!
+    $redirectUrl: String
   ) {
-    checkoutPaymentCreate(checkoutId: $checkoutId, input: $paymentInput) {
+    checkoutPaymentCreate(checkoutId: $checkoutId, input: $paymentInput, redirectUrl: $redirectUrl) {
       errors {
         field
         message
@@ -220,6 +221,21 @@ export const completeCheckoutMutation = gql`
       }
       order {
         ...OrderDetail
+      }
+    }
+  }
+`;
+
+export const confirmPaymentMutation = gql`
+  ${paymentOrderFragment}
+  mutation PaymentSecureConfirm($paymentId: ID!) {
+    paymentSecureConfirm(paymentId: $paymentId) {
+      errors {
+        field
+        message
+      }
+      payment {
+        ...PaymentOrder
       }
     }
   }

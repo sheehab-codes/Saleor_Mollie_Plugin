@@ -4,6 +4,7 @@ import {
   ICheckoutModelPrice,
   ICheckoutModelPriceValue,
   IPaymentCreditCard,
+  IPaymentTransaction,
 } from "@sdk/repository";
 
 import { PromiseQueuedResponse, PromiseRunResponse } from "../types";
@@ -44,11 +45,14 @@ export interface IPromoCodeDiscount {
 
 export type ICreditCard = IPaymentCreditCard;
 
+
+
 export interface IPayment {
   id?: string;
   token?: string;
   gateway?: string;
   creditCard?: ICreditCard | null;
+  transactions?: IPaymentTransaction[] | null;
 }
 
 export interface ICheckout {

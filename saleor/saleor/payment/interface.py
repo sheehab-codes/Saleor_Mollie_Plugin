@@ -62,11 +62,13 @@ class PaymentData:
     billing: Optional[AddressData]
     shipping: Optional[AddressData]
     order_id: Optional[int]
+    payment_id: Optional[int]
     customer_ip_address: Optional[str]
     customer_email: str
     token: Optional[str] = None
     customer_id: Optional[str] = None
     reuse_source: bool = False
+    extra_data: Optional[str] = None
 
 
 @dataclass

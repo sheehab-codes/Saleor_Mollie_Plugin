@@ -14,4 +14,5 @@ export const orderHistoryUrl = `${baseUrl}order-history/`;
 export const addressBookUrl = `${baseUrl}address-book/`;
 export const passwordResetUrl = `${baseUrl}reset-password/`;
 export const checkoutUrl = `${baseUrl}checkout/`;
-export const orderFinalizedUrl = `${baseUrl}order-finalized/`;
+export const finilaizeOrderUrl = `${baseUrl}finalize-order/`;
+export const orderFinalizedUrl = `${baseUrl}order-finalized/:token?/`;

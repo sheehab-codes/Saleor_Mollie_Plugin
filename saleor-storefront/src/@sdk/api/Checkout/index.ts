@@ -91,12 +91,13 @@ export class SaleorCheckoutAPI extends ErrorListener
     );
     this.saleorState.subscribeToChange(
       StateItems.PAYMENT,
-      ({ id, token, gateway, creditCard }: IPaymentModel) => {
+      ({ id, token, gateway, creditCard, transactions }: IPaymentModel) => {
         this.payment = {
           creditCard,
           gateway,
           id,
           token,
+          transactions
         };
         this.paymentLoaded = true;
         this.loaded =
@@ -476,6 +477,23 @@ export class SaleorCheckoutAPI extends ErrorListener
         pending: false,
       };
     }
+  };
+
+  confirmPayment = async (
+    paymentId: string,
+  ): PromiseRunResponse<DataErrorCheckoutTypes, FunctionErrorCheckoutTypes> => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "confirmPayment",
+      {
+        paymentId
+      }
+    );
+    return {
+      data,
+      dataError,
+      pending: false,
+    };
   };
 
   completeCheckout = async (): PromiseRunResponse<

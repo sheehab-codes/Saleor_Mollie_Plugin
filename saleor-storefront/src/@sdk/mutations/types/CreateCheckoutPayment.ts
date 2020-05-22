@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { PaymentInput, PaymentErrorCode } from "./../../types/globalTypes";
+import { PaymentInput, TransactionKind, PaymentErrorCode } from "./../../../../types/globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: CreateCheckoutPayment
@@ -559,6 +559,16 @@ export interface CreateCheckoutPayment_checkoutPaymentCreate_checkout {
   voucherCode: string | null;
 }
 
+export interface CreateCheckoutPayment_checkoutPaymentCreate_payment_transactions {
+  __typename: "Transaction";
+  /**
+   * The ID of the object.
+   */
+  id: string;
+  kind: TransactionKind;
+  gatewayResponse: any;
+}
+
 export interface CreateCheckoutPayment_checkoutPaymentCreate_payment_creditCard {
   __typename: "CreditCard";
   /**
@@ -591,6 +601,10 @@ export interface CreateCheckoutPayment_checkoutPaymentCreate_payment {
   id: string;
   gateway: string;
   token: string;
+  /**
+   * List of all transactions within this payment.
+   */
+  transactions: (CreateCheckoutPayment_checkoutPaymentCreate_payment_transactions | null)[] | null;
   /**
    * The details of the card used for this payment.
    */
@@ -641,4 +655,5 @@ export interface CreateCheckoutPayment {
 export interface CreateCheckoutPaymentVariables {
   checkoutId: string;
   paymentInput: PaymentInput;
+  redirectUrl?: string | null;
 }

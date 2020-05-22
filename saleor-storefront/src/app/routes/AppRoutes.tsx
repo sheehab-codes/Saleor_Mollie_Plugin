@@ -12,7 +12,7 @@ import { HomePage } from "../../views/Home";
 import { ProductPage } from "../../views/Product";
 import { SearchPage } from "../../views/Search";
 
-import { CartPage, CheckoutPage, PasswordReset, ThankYouPage } from "@pages";
+import { CartPage, CheckoutPage, PasswordReset, ThankYouPage, FinalizeOrder } from "@pages";
 
 import * as paths from "./paths";
 
@@ -35,6 +35,7 @@ export const Routes: React.FC = () => (
     <Route path={paths.addressBookUrl} component={Account} />
     <Route path={paths.passwordResetUrl} component={PasswordReset} />
     <Route path={paths.checkoutUrl} component={CheckoutPage} />
+    <Route path={paths.finilaizeOrderUrl} component={FinalizeOrder} />
     <Route path={paths.orderFinalizedUrl} component={ThankYouPage} />
     <Route component={NotFound} />
   </Switch>

@@ -53,6 +53,8 @@ const CheckoutReviewSubpageWithRef: RefForwardingComponent<
           status => status.token === selectedPaymentGatewayToken
         )?.label
       }`;
+    } else if (payment?.gateway?.startsWith("mirumee.payments.external")) {
+      return `External gateway`;
     } else if (payment?.creditCard) {
       return `Ending in ${payment?.creditCard.lastDigits}`;
     }
@@ -61,22 +63,38 @@ const CheckoutReviewSubpageWithRef: RefForwardingComponent<
 
   useImperativeHandle(ref, () => ({
     complete: async () => {
+      // If gateway uses external checkout process,
+      // Redirect the user to checkout flow
       changeSubmitProgress(true);
       const { data, dataError } = await completeCheckout();
-      changeSubmitProgress(false);
-      const errors = dataError?.error;
-      if (errors) {
-        setErrors(errors);
+      if(
+        data?.paymentStatus === "NOT_CHARGED" && 
+        data?.payments.length > 0 && 
+        data?.payments[0].gateway?.startsWith("mirumee.payments.external")
+      ){
+        let parsedRespone = JSON.parse(data.payments[0].transactions[0].gatewayResponse)
+        if(parsedRespone.checkoutUrl){
+          history.push({
+            pathname: '/finalize-order',
+          });
+          window.location.href = parsedRespone.checkoutUrl
+        }
       } else {
-        setErrors([]);
-        history.push({
-          pathname: CHECKOUT_STEPS[3].nextStepLink,
-          state: {
-            id: data?.id,
-            orderNumber: data?.number,
-            token: data?.token,
-          },
-        });
+        changeSubmitProgress(false);
+        const errors = dataError?.error;
+        if (errors) {
+          setErrors(errors);
+        } else {
+          setErrors([]);
+          history.push({
+            pathname: CHECKOUT_STEPS[3].nextStepLink,
+            state: {
+              id: data?.id,
+              orderNumber: data?.number,
+              token: data?.token,
+            },
+          });
+        }
       }
     },
   }));

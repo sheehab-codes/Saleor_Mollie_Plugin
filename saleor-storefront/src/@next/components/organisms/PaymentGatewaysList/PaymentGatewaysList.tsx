@@ -6,6 +6,7 @@ import { PROVIDERS } from "@temp/core/config";
 import {
   BraintreePaymentGateway,
   DummyPaymentGateway,
+  MolliePaymentGateway,
   StripePaymentGateway,
 } from "..";
 import * as S from "./styles";
@@ -60,6 +61,36 @@ const PaymentGatewaysList: React.FC<IProps> = ({
                     }
                     errors={errors}
                     onError={onError}
+                  />
+                )}
+              </div>
+            );
+
+          case PROVIDERS.MOLLIE.label:
+            return (
+              <div key={index}>
+                <S.Tile checked={checked}>
+                  <Radio
+                    data-cy="checkoutPaymentGatewayMollieInput"
+                    name="payment-method"
+                    value="mollie"
+                    checked={checked}
+                    onChange={() =>
+                      selectPaymentGateway && selectPaymentGateway(id)
+                    }
+                    customLabel={true}
+                  >
+                    <span data-cy="checkoutPaymentGatewayMollieName">
+                      {name}
+                    </span>
+                  </Radio>
+                </S.Tile>
+                {checked && (
+                  <MolliePaymentGateway
+                    formRef={formRef}
+                    formId={formId}
+                    processPayment={token => processPayment(id, token)}
+                    initialStatus={selectedPaymentGatewayToken}
                   />
                 )}
               </div>

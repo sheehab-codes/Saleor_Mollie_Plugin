@@ -109,13 +109,19 @@ const CheckoutPage: React.FC<IProps> = ({}: IProps) => {
 
   const [submitInProgress, setSubmitInProgress] = useState(false);
 
-  const [selectedPaymentGateway, setSelectedPaymentGateway] = useState<
-    string | undefined
-  >(payment?.gateway);
+  const [
+    selectedPaymentGateway, 
+    setSelectedPaymentGateway
+  ] = useState<string | undefined>(payment?.gateway);
   const [
     selectedPaymentGatewayToken,
     setSelectedPaymentGatewayToken,
   ] = useState<string | undefined>(payment?.token);
+
+  // const [
+  //   selectedPaymentGatewayCheckoutUrl,
+  //   setSelectedPaymentGatewayCheckoutUrl,
+  // ] = useState<string | undefined>(payment?.token);
 
   useEffect(() => {
     setSelectedPaymentGateway(payment?.gateway);
@@ -123,6 +129,24 @@ const CheckoutPage: React.FC<IProps> = ({}: IProps) => {
   useEffect(() => {
     setSelectedPaymentGatewayToken(payment?.token);
   }, [payment?.token]);
+
+  useEffect(() => {
+    setSelectedPaymentGateway(payment?.gateway);
+  }, [payment?.gateway]);
+
+  // useEffect(() => {
+  //   let checkoutUrl
+  //   if(payment && payment.transactions && 
+  //     payment.transactions[payment.transactions.length - 1] &&
+  //     payment.transactions[payment.transactions.length - 1].gatewayResponse
+  //   ){
+  //   const gatewayResponse = JSON.parse(payment.transactions[payment.transactions.length - 1].gatewayResponse || "{}");
+  //   if(gatewayResponse && gatewayResponse.checkoutUrl){
+  //     checkoutUrl = gatewayResponse.checkoutUrl;
+  //   }
+  // }
+  //   setSelectedPaymentGatewayCheckoutUrl(checkoutUrl)
+  // }, []);
 
   const matchingStepIndex = CHECKOUT_STEPS.findIndex(
     ({ link }) => link === pathname

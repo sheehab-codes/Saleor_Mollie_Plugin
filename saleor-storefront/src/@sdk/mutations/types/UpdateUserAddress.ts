@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { AddressInput } from "./../../types/globalTypes";
+import { AddressInput } from "./../../../../types/globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: UpdateUserAddress

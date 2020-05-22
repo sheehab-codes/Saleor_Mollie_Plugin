@@ -5,6 +5,8 @@ import {
   checkoutProductVariantFragment,
 } from "./checkout";
 
+import { paymentFragment } from "./payment"
+
 export const orderPriceFragment = gql`
   fragment OrderPrice on TaxedMoney {
     gross {
@@ -19,6 +21,7 @@ export const orderPriceFragment = gql`
 `;
 
 export const orderDetailFragment = gql`
+  ${paymentFragment}
   ${orderPriceFragment}
   ${checkoutAddressFragment}
   ${checkoutProductVariantFragment}
@@ -31,6 +34,9 @@ export const orderDetailFragment = gql`
     id
     token
     number
+    payments {
+      ...Payment
+    }
     shippingAddress {
       ...Address
     }

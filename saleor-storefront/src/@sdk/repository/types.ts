@@ -4,6 +4,10 @@ import {
   Checkout_lines_variant_pricing,
   Checkout_lines_variant_product,
 } from "../fragments/types/Checkout";
+import { PaymentChargeStatusEnum } from "../../../types/globalTypes";
+
+import { Payment_transactions } from "../fragments/types/Payment"
+import { OrderDetail_payments } from "../fragments/types/OrderDetail"
 
 export enum LocalStorageItems {
   JOB_QUEUE_CHECKOUT = "job_queueCheckout",
@@ -96,6 +100,12 @@ export interface IPaymentCreditCard {
   expYear?: number;
 }
 
+export interface IPaymentTransaction {
+  id?: string;
+  kind?: string;
+  gatewayResponse?: string;
+}
+
 export interface ICheckoutModel {
   id?: string;
   token?: any;
@@ -116,12 +126,16 @@ export interface IPaymentModel {
   token?: string;
   gateway?: string;
   creditCard?: IPaymentCreditCard | null;
+  transactions?: (Payment_transactions | null)[] | null;
+  checkoutUrl?: string;
 }
 
 export interface IOrderModel {
   id?: string;
   token?: string;
   number?: string | null;
+  paymentStatus: PaymentChargeStatusEnum | null;
+  payments: (OrderDetail_payments | null)[] | null;
 }
 
 // export interface IJobsModel {

@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { AccountErrorCode } from "./../../types/globalTypes";
+import { AccountErrorCode } from "./../../../../types/globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: SetPassword

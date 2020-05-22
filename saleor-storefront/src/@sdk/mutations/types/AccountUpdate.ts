@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { AccountInput } from "./../../types/globalTypes";
+import { AccountInput } from "./../../../../types/globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: AccountUpdate

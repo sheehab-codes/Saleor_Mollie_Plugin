@@ -5,6 +5,8 @@ from django.core.exceptions import ValidationError
 from ...core.permissions import OrderPermissions
 from ...core.taxes import zero_taxed_money
 from ...core.utils import get_client_ip
+from ...core.utils.url import validate_storefront_url
+
 from ...graphql.checkout.utils import clean_billing_address, clean_checkout_shipping
 from ...payment import PaymentError, gateway, models
 from ...payment.error_codes import PaymentErrorCode
@@ -60,6 +62,12 @@ class CheckoutPaymentCreate(BaseMutation, I18nMixin):
         input = PaymentInput(
             description="Data required to create a new payment.", required=True
         )
+        redirect_url = graphene.String(
+            description=(
+                "Base of frontend URL that will be needed to create confirmation URL."
+            ),
+            required=False,
+        )
 
     class Meta:
         description = "Create a new payment for given checkout."
@@ -102,7 +110,7 @@ class CheckoutPaymentCreate(BaseMutation, I18nMixin):
             )
 
     @classmethod
-    def perform_mutation(cls, _root, info, checkout_id, **data):
+    def perform_mutation(cls, _root, info, checkout_id, redirect_url, **data):
         checkout_id = from_global_id_strict_type(
             checkout_id, only_type=Checkout, field="checkout_id"
         )
@@ -120,6 +128,19 @@ class CheckoutPaymentCreate(BaseMutation, I18nMixin):
         clean_billing_address(checkout, PaymentErrorCode)
         cls.clean_payment_amount(info, checkout_total, amount)
         extra_data = {"customer_user_agent": info.context.META.get("HTTP_USER_AGENT")}
+
+        if redirect_url:
+            try:
+                validate_storefront_url(redirect_url)
+                extra_data['redirect_url'] = redirect_url
+            except ValidationError as error:
+                raise ValidationError(
+                    {
+                        "redirect_url": ValidationError(
+                            error.message, code=PaymentErrorCode.INVALID
+                        )
+                    }
+                )
 
         payment = create_payment(
             gateway=data["gateway"],

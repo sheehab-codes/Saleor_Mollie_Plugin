@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { CheckoutErrorCode } from "./../../types/globalTypes";
+import { CheckoutErrorCode } from "./../../../../types/globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: RemoveCheckoutPromoCode

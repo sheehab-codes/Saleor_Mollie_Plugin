@@ -2,9 +2,21 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
+import { TransactionKind } from "./../../../../types/globalTypes";
+
 // ====================================================
 // GraphQL fragment: Payment
 // ====================================================
+
+export interface Payment_transactions {
+  __typename: "Transaction";
+  /**
+   * The ID of the object.
+   */
+  id: string;
+  kind: TransactionKind;
+  gatewayResponse: any;
+}
 
 export interface Payment_creditCard {
   __typename: "CreditCard";
@@ -38,6 +50,10 @@ export interface Payment {
   id: string;
   gateway: string;
   token: string;
+  /**
+   * List of all transactions within this payment.
+   */
+  transactions: (Payment_transactions | null)[] | null;
   /**
    * The details of the card used for this payment.
    */

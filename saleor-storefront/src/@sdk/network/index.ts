@@ -1,5 +1,4 @@
 import ApolloClient from "apollo-client";
-
 import { getAuthToken } from "@sdk/auth";
 import { Checkout } from "@sdk/fragments/types/Checkout";
 import { OrderDetail } from "@sdk/fragments/types/OrderDetail";
@@ -38,6 +37,10 @@ import {
   UpdateCheckoutLineVariables,
 } from "@sdk/mutations/types/UpdateCheckoutLine";
 import {
+  PaymentSecureConfirm,
+  PaymentSecureConfirmVariables,
+} from "@sdk/mutations/types/PaymentSecureConfirm";
+import {
   UpdateCheckoutShippingAddress,
   UpdateCheckoutShippingAddressVariables,
 } from "@sdk/mutations/types/UpdateCheckoutShippingAddress";
@@ -68,6 +71,7 @@ import { CountryCode } from "@sdk/types/globalTypes";
 import { filterNotEmptyArrayItems } from "@sdk/utils";
 
 import { INetworkManager } from "./types";
+import { finilaizeOrderUrl } from "../../app/routes";
 
 export class NetworkManager implements INetworkManager {
   private client: ApolloClient<any>;
@@ -693,6 +697,7 @@ export class NetworkManager implements INetworkManager {
     paymentToken: string,
     billingAddress: ICheckoutAddress
   ) => {
+    const redirectUrl = `${window.location.origin}${finilaizeOrderUrl}`;
     try {
       const variables = {
         checkoutId,
@@ -716,6 +721,7 @@ export class NetworkManager implements INetworkManager {
           gateway: paymentGateway,
           token: paymentToken,
         },
+        redirectUrl,
       };
       const { data, errors } = await this.client.mutate<
         CreateCheckoutPayment,
@@ -747,6 +753,44 @@ export class NetworkManager implements INetworkManager {
     }
   };
 
+  confirmPayment = async (
+    paymentId: string,
+  ) => {
+    try {
+      const variables = {
+        paymentId,
+      };
+      const { data, errors } = await this.client.mutate<
+        PaymentSecureConfirm,
+        PaymentSecureConfirmVariables
+      >({
+        mutation: CheckoutMutations.confirmPaymentMutation,
+        variables,
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      } else if (data?.paymentSecureConfirm?.errors.length) {
+        return {
+          error: data?.paymentSecureConfirm?.errors,
+        };
+      } else if (data?.paymentSecureConfirm?.payment) {
+        console.log(data.paymentSecureConfirm.payment)
+        return {
+          data: data.paymentSecureConfirm.payment,
+        };
+      } else {
+        return {};
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
   completeCheckout = async (checkoutId: string) => {
     try {
       const { data, errors } = await this.client.mutate<
@@ -766,6 +810,7 @@ export class NetworkManager implements INetworkManager {
           error: data?.checkoutComplete?.errors,
         };
       } else if (data?.checkoutComplete?.order) {
+        console.log(data.checkoutComplete.order)
         return {
           data: this.constructOrderModel(data.checkoutComplete.order),
         };
@@ -838,20 +883,26 @@ export class NetworkManager implements INetworkManager {
     gateway,
     token,
     creditCard,
+    transactions,
   }: Payment): IPaymentModel => ({
     creditCard,
     gateway,
     id,
     token,
+    transactions,
   });
 
   private constructOrderModel = ({
     id,
     token,
     number: orderNumber,
+    paymentStatus,
+    payments,
   }: OrderDetail): IOrderModel => ({
     id,
     number: orderNumber,
     token,
+    paymentStatus,
+    payments,
   });
 }

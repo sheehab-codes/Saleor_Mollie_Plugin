@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { CheckoutCreateInput } from "./../../types/globalTypes";
+import { CheckoutCreateInput } from "./../../../../types/globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: CreateCheckout

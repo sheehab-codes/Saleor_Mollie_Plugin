@@ -303,7 +303,30 @@ export class CheckoutJobs {
         gateway: data?.gateway,
         id: data?.id,
         token: data?.token,
+        transactions: data?.transactions,
       });
+      return { data };
+    }
+  };
+
+  confirmPayment = async ({
+    paymentId,
+  }: {
+    paymentId: string;
+  }): PromiseCheckoutJobRunResponse => {
+
+    const { data, error } = await this.networkManager.confirmPayment(
+      paymentId
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CREATE_PAYMENT,
+        },
+      };
+    } else {
       return { data };
     }
   };

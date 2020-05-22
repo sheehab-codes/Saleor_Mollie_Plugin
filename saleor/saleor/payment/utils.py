@@ -55,10 +55,12 @@ def create_payment_information(
         billing=billing_address,
         shipping=shipping_address,
         order_id=order_id,
+        payment_id=payment.pk,
         customer_ip_address=payment.customer_ip_address,
         customer_id=customer_id,
         customer_email=payment.billing_email,
         reuse_source=store_source,
+        extra_data=payment.extra_data,
     )
 
 

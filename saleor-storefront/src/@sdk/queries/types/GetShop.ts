@@ -63,7 +63,7 @@ export interface GetShop_shop {
   /**
    * List of countries available in the shop.
    */
-  countries: (GetShop_shop_countries | null)[];
+  countries: GetShop_shop_countries[];
   /**
    * Customer's geolocalization data.
    */

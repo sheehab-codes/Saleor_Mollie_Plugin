@@ -2455,7 +2455,7 @@ type Mutation {
   checkoutLinesAdd(checkoutId: ID!, lines: [CheckoutLineInput]!): CheckoutLinesAdd
   checkoutLinesUpdate(checkoutId: ID!, lines: [CheckoutLineInput]!): CheckoutLinesUpdate
   checkoutRemovePromoCode(checkoutId: ID!, promoCode: String!): CheckoutRemovePromoCode
-  checkoutPaymentCreate(checkoutId: ID!, input: PaymentInput!): CheckoutPaymentCreate
+  checkoutPaymentCreate(checkoutId: ID!, input: PaymentInput!, redirectUrl: String): CheckoutPaymentCreate
   checkoutShippingAddressUpdate(checkoutId: ID!, shippingAddress: AddressInput!): CheckoutShippingAddressUpdate
   checkoutShippingMethodUpdate(checkoutId: ID, shippingMethodId: ID!): CheckoutShippingMethodUpdate
   checkoutUpdateMetadata(id: ID!, input: MetaInput!): CheckoutUpdateMeta @deprecated(reason: "Use the `updateMetadata` mutation. This field will be removed after 2020-07-31.")

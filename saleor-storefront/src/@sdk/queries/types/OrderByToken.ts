@@ -2,11 +2,63 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { PaymentChargeStatusEnum, OrderStatus } from "./../../types/globalTypes";
+import { PaymentChargeStatusEnum, OrderStatus, TransactionKind } from "./../../../../types/globalTypes";
 
 // ====================================================
 // GraphQL query operation: OrderByToken
 // ====================================================
+
+export interface OrderByToken_orderByToken_payments_transactions {
+  __typename: "Transaction";
+  /**
+   * The ID of the object.
+   */
+  id: string;
+  kind: TransactionKind;
+  gatewayResponse: any;
+}
+
+export interface OrderByToken_orderByToken_payments_creditCard {
+  __typename: "CreditCard";
+  /**
+   * Card brand.
+   */
+  brand: string;
+  /**
+   * The host name of the domain.
+   */
+  firstDigits: string;
+  /**
+   * Last 4 digits of the card number.
+   */
+  lastDigits: string;
+  /**
+   * Two-digit number representing the card’s expiration month.
+   */
+  expMonth: number;
+  /**
+   * Four-digit number representing the card’s expiration year.
+   */
+  expYear: number;
+}
+
+export interface OrderByToken_orderByToken_payments {
+  __typename: "Payment";
+  /**
+   * The ID of the object.
+   */
+  id: string;
+  gateway: string;
+  token: string;
+  /**
+   * List of all transactions within this payment.
+   */
+  transactions: (OrderByToken_orderByToken_payments_transactions | null)[] | null;
+  /**
+   * The details of the card used for this payment.
+   */
+  creditCard: OrderByToken_orderByToken_payments_creditCard | null;
+}
 
 export interface OrderByToken_orderByToken_shippingAddress_country {
   __typename: "CountryDisplay";
@@ -437,6 +489,10 @@ export interface OrderByToken_orderByToken {
    * User-friendly number of an order.
    */
   number: string | null;
+  /**
+   * List of payments for the order.
+   */
+  payments: (OrderByToken_orderByToken_payments | null)[] | null;
   shippingAddress: OrderByToken_orderByToken_shippingAddress | null;
   /**
    * List of order lines.
