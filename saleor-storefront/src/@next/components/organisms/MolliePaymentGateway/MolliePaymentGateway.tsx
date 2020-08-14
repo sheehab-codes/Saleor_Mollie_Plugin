@@ -6,43 +6,43 @@ import { Radio } from "@components/atoms";
 import * as S from "./styles";
 import { IProps } from "./types";
 
+
+
 export const mollieStatuses = [
-  { token: "charged", label: "Charged" },
-  { token: "authorized", label: "Authorized" },
-  { token: "fully-refunded", label: "Fully refunded" },
-  { token: "not-charged", label: "Not charged" },
+  { id: 'ideal', 'description': "iDEAL", image:{svg: 'https://www.mollie.com/external/icons/payment-methods/ideal.svg'} },
+  { id: 'creditcard', 'description': "Credit card", image:{svg: 'https://www.mollie.com/external/icons/payment-methods/creditcard.svg'} },
+  { id: 'paypal', 'description': "Paypal", image:{svg: 'https://www.mollie.com/external/icons/payment-methods/paypal.svg'} },
 ];
 
 /**
  * Dummy payment gateway.
  */
 const MolliePaymentGateway: React.FC<IProps> = ({
-  processPayment,
-  formRef,
-  formId,
-  initialStatus,
-}: IProps) => {
+                                                  processPayment,
+                                                  formRef,
+                                                  formId, gatewaySubType,
+                                                  initialStatus,
+                                                }: IProps) => {
   return (
-    <Formik
-      initialValues={{ status: initialStatus || mollieStatuses[0].token }}
-      onSubmit={(values, { setSubmitting }) => {
-        processPayment('not-charged');
-        setSubmitting(false);
-      }}
-    >
-      {({
-        handleChange,
-        handleSubmit,
-        handleBlur,
-        values,
-        isSubmitting,
-        isValid,
-      }) => (
-        <S.Form id={formId} ref={formRef} onSubmit={handleSubmit}>
-          
-        </S.Form>
-      )}
-    </Formik>
+      <Formik
+          initialValues={{ status: initialStatus || mollieStatuses[0].token }}
+          onSubmit={(values, { setSubmitting }) => {
+            processPayment(`not-charged##${gatewaySubType}`);
+            setSubmitting(false);
+          }}
+      >
+        {({
+            handleChange,
+            handleSubmit,
+            handleBlur,
+            values,
+            isSubmitting,
+            isValid,
+          }) => {
+          return  <S.Form id={formId} ref={formRef} onSubmit={handleSubmit} />
+        }
+        }
+      </Formik>
   );
 };
 
