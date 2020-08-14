@@ -97,7 +97,8 @@ export class SaleorCheckoutAPI extends ErrorListener
           gateway,
           id,
           token,
-          transactions
+          // @ts-ignore
+          transactions,
         };
         this.paymentLoaded = true;
         this.loaded =
@@ -480,13 +481,13 @@ export class SaleorCheckoutAPI extends ErrorListener
   };
 
   confirmPayment = async (
-    paymentId: string,
+    paymentId: string
   ): PromiseRunResponse<DataErrorCheckoutTypes, FunctionErrorCheckoutTypes> => {
     const { data, dataError } = await this.jobsManager.run(
       "checkout",
       "confirmPayment",
       {
-        paymentId
+        paymentId,
       }
     );
     return {

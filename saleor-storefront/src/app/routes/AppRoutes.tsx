@@ -12,7 +12,7 @@ import { HomePage } from "../../views/Home";
 import { ProductPage } from "../../views/Product";
 import { SearchPage } from "../../views/Search";
 
-import { CartPage, CheckoutPage, PasswordReset, ThankYouPage, FinalizeOrder } from "@pages";
+import { CartPage, CheckoutPage, FinalizeOrder, PasswordReset, ThankYouPage } from "@pages";
 
 import * as paths from "./paths";
 

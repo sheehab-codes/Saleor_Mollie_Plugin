@@ -45,9 +45,9 @@ def authorize(payment_information: PaymentData, config: GatewayConfig) -> Gatewa
                 'currency': str(payment_information.currency),
                 'value': f"{payment_information.amount:.2f}"
             },
-            'description': 'Goldflorin payment',
+            'description': 'Saleor e-commerce payment',
             'redirectUrl': redirect_url,
-            'webhookUrl': 'https://webhook.site/e9f8d2b8-527f-4fd3-a335-c0fe46d62d61',
+            'method': transaction_id,
         })
 
         transaction_id = payment['id']

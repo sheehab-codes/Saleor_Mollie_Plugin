@@ -72,7 +72,7 @@ const CheckoutReviewSubpageWithRef: RefForwardingComponent<
         data?.payments.length > 0 && 
         data?.payments[0].gateway?.startsWith("mirumee.payments.external")
       ){
-        let parsedRespone = JSON.parse(data.payments[0].transactions[0].gatewayResponse)
+        const parsedRespone = JSON.parse(data.payments[0].transactions[0].gatewayResponse)
         if(parsedRespone.checkoutUrl){
           history.push({
             pathname: '/finalize-order',

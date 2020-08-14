@@ -111,7 +111,7 @@ const CheckoutPage: React.FC<IProps> = ({}: IProps) => {
 
   const [
     selectedPaymentGateway, 
-    setSelectedPaymentGateway
+    setSelectedPaymentGateway,
   ] = useState<string | undefined>(payment?.gateway);
   const [
     selectedPaymentGatewayToken,

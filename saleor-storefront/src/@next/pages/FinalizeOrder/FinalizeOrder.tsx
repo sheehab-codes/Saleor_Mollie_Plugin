@@ -1,10 +1,10 @@
+import { Loader } from "@components/atoms";
+import { Container } from "@components/templates";
+import { useCheckout } from "@sdk/react";
+import { CHECKOUT_STEPS } from "@temp/core/config";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { StringParam, useQueryParams } from 'use-query-params';
-import { useCheckout } from "@sdk/react";
-import { CHECKOUT_STEPS } from "@temp/core/config";
-import { Loader } from "@components/atoms";
-import { Container } from "@components/templates";
 
 import * as S from "./styles";
 import { IProps } from "./types";
@@ -22,7 +22,7 @@ const FinalizeOrder: React.FC<IProps> = ({}: IProps) => {
       confirmPayment(query.token).then( (res) => {
         const errors = res.dataError
         if (errors) {
-          console.log(errors.error)
+          // console.log(errors.error)
         } else {
           history.push({
             pathname: CHECKOUT_STEPS[3].nextStepLink,

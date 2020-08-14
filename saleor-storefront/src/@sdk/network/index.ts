@@ -1,4 +1,3 @@
-import ApolloClient from "apollo-client";
 import { getAuthToken } from "@sdk/auth";
 import { Checkout } from "@sdk/fragments/types/Checkout";
 import { OrderDetail } from "@sdk/fragments/types/OrderDetail";
@@ -21,6 +20,10 @@ import {
   CreateCheckoutPaymentVariables,
 } from "@sdk/mutations/types/CreateCheckoutPayment";
 import {
+  PaymentSecureConfirm,
+  PaymentSecureConfirmVariables,
+} from "@sdk/mutations/types/PaymentSecureConfirm";
+import {
   RemoveCheckoutPromoCode,
   RemoveCheckoutPromoCodeVariables,
 } from "@sdk/mutations/types/RemoveCheckoutPromoCode";
@@ -36,10 +39,6 @@ import {
   UpdateCheckoutLine,
   UpdateCheckoutLineVariables,
 } from "@sdk/mutations/types/UpdateCheckoutLine";
-import {
-  PaymentSecureConfirm,
-  PaymentSecureConfirmVariables,
-} from "@sdk/mutations/types/PaymentSecureConfirm";
 import {
   UpdateCheckoutShippingAddress,
   UpdateCheckoutShippingAddressVariables,
@@ -69,9 +68,10 @@ import {
 } from "@sdk/repository";
 import { CountryCode } from "@sdk/types/globalTypes";
 import { filterNotEmptyArrayItems } from "@sdk/utils";
+import ApolloClient from "apollo-client";
 
-import { INetworkManager } from "./types";
 import { finilaizeOrderUrl } from "../../app/routes";
+import { INetworkManager } from "./types";
 
 export class NetworkManager implements INetworkManager {
   private client: ApolloClient<any>;
@@ -754,7 +754,7 @@ export class NetworkManager implements INetworkManager {
   };
 
   confirmPayment = async (
-    paymentId: string,
+    paymentId: string
   ) => {
     try {
       const variables = {
@@ -777,7 +777,7 @@ export class NetworkManager implements INetworkManager {
           error: data?.paymentSecureConfirm?.errors,
         };
       } else if (data?.paymentSecureConfirm?.payment) {
-        console.log(data.paymentSecureConfirm.payment)
+        // console.log(data.paymentSecureConfirm.payment)
         return {
           data: data.paymentSecureConfirm.payment,
         };
@@ -810,7 +810,7 @@ export class NetworkManager implements INetworkManager {
           error: data?.checkoutComplete?.errors,
         };
       } else if (data?.checkoutComplete?.order) {
-        console.log(data.checkoutComplete.order)
+        // console.log(data.checkoutComplete.order)
         return {
           data: this.constructOrderModel(data.checkoutComplete.order),
         };
@@ -902,6 +902,7 @@ export class NetworkManager implements INetworkManager {
     id,
     number: orderNumber,
     token,
+    // tslint:disable-next-line:object-literal-sort-keys
     paymentStatus,
     payments,
   });
