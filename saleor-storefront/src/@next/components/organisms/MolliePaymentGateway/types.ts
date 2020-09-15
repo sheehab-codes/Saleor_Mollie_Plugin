@@ -15,4 +15,6 @@ export interface IProps {
    * Initially selected status/token
    */
   initialStatus?: string;
+
+  paymentDetails: object
 }

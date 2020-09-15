@@ -20,10 +20,12 @@ def dummy_success():
 def get_client_token(**_):
     return str(uuid.uuid4())
 
+
 def prepare_api_client(config: GatewayConfig):
     mollie_client = Client()
     mollie_client.set_api_key(config.connection_params['api_key'])
     return mollie_client
+
 
 def authorize(payment_information: PaymentData, config: GatewayConfig) -> GatewayResponse:
     success = True

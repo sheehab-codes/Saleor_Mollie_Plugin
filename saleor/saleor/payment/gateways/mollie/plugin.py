@@ -1,6 +1,9 @@
 from typing import TYPE_CHECKING
 
 from saleor.plugins.base_plugin import BasePlugin, ConfigurationTypeField
+from mollie.api.client import Client
+from mollie.api.error import Error
+import json
 
 from . import (
     GatewayConfig,
@@ -68,37 +71,37 @@ class MollieGatewayPlugin(BasePlugin):
 
     @require_active_plugin
     def authorize_payment(
-        self, payment_information: "PaymentData", previous_value
+            self, payment_information: "PaymentData", previous_value
     ) -> "GatewayResponse":
         return authorize(payment_information, self._get_gateway_config())
 
     @require_active_plugin
     def capture_payment(
-        self, payment_information: "PaymentData", previous_value
+            self, payment_information: "PaymentData", previous_value
     ) -> "GatewayResponse":
         return capture(payment_information, self._get_gateway_config())
 
     @require_active_plugin
     def confirm_payment(
-        self, payment_information: "PaymentData", previous_value
+            self, payment_information: "PaymentData", previous_value
     ) -> "GatewayResponse":
         return confirm(payment_information, self._get_gateway_config())
 
     @require_active_plugin
     def refund_payment(
-        self, payment_information: "PaymentData", previous_value
+            self, payment_information: "PaymentData", previous_value
     ) -> "GatewayResponse":
         return refund(payment_information, self._get_gateway_config())
 
     @require_active_plugin
     def void_payment(
-        self, payment_information: "PaymentData", previous_value
+            self, payment_information: "PaymentData", previous_value
     ) -> "GatewayResponse":
         return void(payment_information, self._get_gateway_config())
 
     @require_active_plugin
     def process_payment(
-        self, payment_information: "PaymentData", previous_value
+            self, payment_information: "PaymentData", previous_value
     ) -> "GatewayResponse":
         return process_payment(payment_information, self._get_gateway_config())
 
@@ -109,4 +112,21 @@ class MollieGatewayPlugin(BasePlugin):
     @require_active_plugin
     def get_payment_config(self, previous_value):
         config = self._get_gateway_config()
-        return [{"field": "store_customer_card", "value": config.store_customer}]
+        # Here with the payment gateway info we are sending available methods as well.
+        try:
+            mollie_client = prepare_api_client(config)
+            methods = mollie_client.methods.list()
+            return [
+                {"field": "store_customer_card", "value": config.store_customer},
+                {"field": "store_payment_gateway", "value": json.dumps({
+                    "methods": list(methods)
+                })}
+            ]
+        except Error as ex:
+            return [{"field": "store_customer_card", "value": config.store_customer}, {"field": "store_customer_card", "value": config.store_customer}]
+
+
+def prepare_api_client(config: GatewayConfig):
+    mollie_client = Client()
+    mollie_client.set_api_key(config.connection_params['api_key'])
+    return mollie_client

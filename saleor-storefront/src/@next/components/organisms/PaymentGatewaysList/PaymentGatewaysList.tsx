@@ -26,6 +26,7 @@ const PaymentGatewaysList: React.FC<IProps> = ({
   errors,
   onError,
 }: IProps) => {
+  console.log(paymentGateways, selectedPaymentGateway)
   return (
     <S.Wrapper>
       {paymentGateways.map(({ id, name, config }, index) => {
@@ -91,6 +92,7 @@ const PaymentGatewaysList: React.FC<IProps> = ({
                     formId={formId}
                     processPayment={token => processPayment(id, token)}
                     initialStatus={selectedPaymentGatewayToken}
+                    paymentDetails={paymentGateways.find(gateway => gateway.id === selectedPaymentGateway)}
                   />
                 )}
               </div>

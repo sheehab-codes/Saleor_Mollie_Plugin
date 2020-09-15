@@ -17,15 +17,35 @@ export const mollieStatuses = [
 /**
  * Dummy payment gateway.
  */
+
+function getPaymentGateway(paymentDetails: object){
+    if(paymentDetails){
+        try{
+            // @ts-ignore
+            const {config} = paymentDetails;
+            const {methods} = JSON.parse(config[1].value);
+            console.log(methods)
+            return methods
+        }
+        catch (e) {
+            console.log(e);
+            return [];
+        }
+    }
+    return [];
+}
+
 const MolliePaymentGateway: React.FC<IProps> = ({
                                                     processPayment,
                                                     formRef,
                                                     formId,
                                                     initialStatus,
+                                                    paymentDetails
                                                 }: IProps) => {
+    const methods = getPaymentGateway(paymentDetails)
     return (
         <Formik
-            initialValues={{ status: initialStatus || mollieStatuses[0].id }}
+            initialValues={{ status: initialStatus || methods[0].id }}
             onSubmit={(values, { setSubmitting }) => {
                 processPayment(values.status);
                 setSubmitting(false);
@@ -40,7 +60,7 @@ const MolliePaymentGateway: React.FC<IProps> = ({
                   isValid,
               }) => {
                 return  <S.Form id={formId} ref={formRef} onSubmit={handleSubmit}>
-                    {mollieStatuses.map(({ id, description, image }) => {
+                    {methods.map(({ id, description, image }) => {
                         return (
                             <S.Status key={id}>
                                 <Radio
