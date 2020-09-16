@@ -24,7 +24,6 @@ function getPaymentGateway(paymentDetails: object){
             // @ts-ignore
             const {config} = paymentDetails;
             const {methods} = JSON.parse(config[1].value);
-            console.log(methods)
             return methods
         }
         catch (e) {
@@ -43,9 +42,10 @@ const MolliePaymentGateway: React.FC<IProps> = ({
                                                     paymentDetails
                                                 }: IProps) => {
     const methods = getPaymentGateway(paymentDetails)
+    const status = initialStatus? initialStatus: methods? methods[0].id : null;
     return (
         <Formik
-            initialValues={{ status: initialStatus || methods[0].id }}
+            initialValues={{ status }}
             onSubmit={(values, { setSubmitting }) => {
                 processPayment(values.status);
                 setSubmitting(false);

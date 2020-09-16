@@ -123,7 +123,12 @@ class MollieGatewayPlugin(BasePlugin):
                 })}
             ]
         except Error as ex:
-            return [{"field": "store_customer_card", "value": config.store_customer}, {"field": "store_customer_card", "value": config.store_customer}]
+            return [
+                {"field": "store_customer_card", "value": config.store_customer},
+                {"field": "store_payment_gateway", "value": json.dumps({
+                    "methods": list([])
+                })}
+            ]
 
 
 def prepare_api_client(config: GatewayConfig):
